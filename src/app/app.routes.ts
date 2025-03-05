@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'state', component: StateViewComponent },
   {
     path: 'state/:stateName',
-    component: DistrictViewComponent,
+    component: DistrictViewComponent,renderMode: 'manual',
     providers: [
       {
         provide: 'getPrerenderParams',
