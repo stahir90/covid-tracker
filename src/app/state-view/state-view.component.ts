@@ -37,32 +37,34 @@ export class StateViewComponent implements OnInit {
     ];
 
     this.http.get('assets/data/covid_data.json').subscribe((data: any) => {
-      this.states = Object.keys(data).map((stateName, index) => {
-        const stateData = data[stateName].districtData;
-        const totalConfirmed = Object.values(stateData).reduce(
-          (sum: number, district: any) => sum + district.confirmed,
-          0
-        );
-        const totalRecovered = Object.values(stateData).reduce(
-          (sum: number, district: any) => sum + district.recovered,
-          0
-        );
-        const totalDeceased = Object.values(stateData).reduce(
-          (sum: number, district: any) => sum + district.deceased,
-          0
-        );
+      this.states = Object.keys(data)
+        .filter((stateName) => stateName !== 'State Unassigned')
+        .map((stateName, index) => {
+          const stateData = data[stateName].districtData;
+          const totalConfirmed = Object.values(stateData).reduce(
+            (sum: number, district: any) => sum + district.confirmed,
+            0
+          );
+          const totalRecovered = Object.values(stateData).reduce(
+            (sum: number, district: any) => sum + district.recovered,
+            0
+          );
+          const totalDeceased = Object.values(stateData).reduce(
+            (sum: number, district: any) => sum + district.deceased,
+            0
+          );
 
-        const imageIndex = index % stateImages.length;
-        const image = stateImages[imageIndex];
+          const imageIndex = index % stateImages.length;
+          const image = stateImages[imageIndex];
 
-        return {
-          name: stateName,
-          confirmed: totalConfirmed,
-          recovered: totalRecovered,
-          deceased: totalDeceased,
-          image: image,
-        };
-      });
+          return {
+            name: stateName,
+            confirmed: totalConfirmed,
+            recovered: totalRecovered,
+            deceased: totalDeceased,
+            image: image,
+          };
+        });
     });
   }
 

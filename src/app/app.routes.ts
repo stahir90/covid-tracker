@@ -15,12 +15,6 @@ export const routes: Routes = [
   {
     path: 'state/:stateName',
     component: DistrictViewComponent,
-    providers: [
-      {
-        provide: 'getPrerenderParams',
-        useValue: getPrerenderParams,
-      },
-    ],
   },
   { path: '', redirectTo: '/state', pathMatch: 'full' },
   { path: '**', redirectTo: '/state' },
