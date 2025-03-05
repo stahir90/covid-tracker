@@ -1,0 +1,31 @@
+
+  <mat-list>
+    <mat-list-item
+      *ngFor="let state of states"
+      (click)="onStateClick(state)"
+      class="state-tile"
+    >
+      <div class="state-container">
+        <img [src]="state.image" alt="{{ state.name }}" class="state-image" />
+        <div class="state-content">
+          <span class="mat-title-large">{{ state.name }}</span>
+          <div class="stats-container">
+            <div class="stats-inner">
+              <img src="assets/icons/person.png" alt="person-icon" />
+              <p class="mat-body-medium">Confirmed: {{ state.confirmed }}</p>
+            </div>
+
+            <div class="stats-inner">
+              <img src="assets/icons/tick.png" alt="person-icon" />
+              <p class="mat-body-medium">Recovered: {{ state.recovered }}</p>
+            </div>
+            <div class="stats-inner">
+              <img src="assets/icons/cross.png" alt="person-icon" />
+              <p class="mat-body-medium">Deceased: {{ state.deceased }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+

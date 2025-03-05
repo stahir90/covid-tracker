@@ -1,0 +1,38 @@
+<div class="district-root">
+    <div class="back-container" (click)="goBack()">
+  <mat-icon>arrow_back</mat-icon>
+  <button class="back-button mat-title-large" mat-button >
+    Back
+  </button>
+  </div>
+  <h1 class="mat-title-large">COVID-19 Cases > {{ stateName }}</h1>
+  <mat-list>
+    <mat-list-item *ngFor="let district of districts" class="district-tile">
+      <div class="district-container">
+        <img
+          [src]="district.image"
+          alt="{{ district.name }}"
+          class="district-image"
+        />
+        <div class="district-content">
+          <span class="mat-title-large">{{ district.name }}</span>
+          <div class="stats-container">
+            <div class="stats-inner">
+              <img src="assets/icons/person.png" alt="person-icon" />
+              <p class="mat-body-medium">Confirmed: {{ district.confirmed }}</p>
+            </div>
+
+            <div class="stats-inner">
+              <img src="assets/icons/tick.png" alt="person-icon" />
+              <p class="mat-body-medium">Recovered: {{ district.recovered }}</p>
+            </div>
+            <div class="stats-inner">
+              <img src="assets/icons/cross.png" alt="person-icon" />
+              <p class="mat-body-medium">Deceased: {{ district.deceased }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
