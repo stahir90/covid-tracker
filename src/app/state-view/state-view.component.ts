@@ -46,6 +46,6 @@ export class StateViewComponent {
   constructor(private router: Router) {}
 
   onStateClick(state: any) {
-    this.router.navigate(['/district'], { state: { stateName: state.name } });
+    this.router.navigate(['/state', state.name]);
   }
 }

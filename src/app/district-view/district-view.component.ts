@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './district-view.component.html',
   styleUrls: ['./district-view.component.scss'],
 })
-export class DistrictViewComponent {
+export class DistrictViewComponent implements OnInit {
   stateName: string = '';
   districts = [
     {
@@ -37,11 +37,12 @@ export class DistrictViewComponent {
     },
   ];
 
-  constructor(private router: Router) {
-    const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state) {
-      this.stateName = state['stateName'];
-    }
+  constructor(private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.stateName = params.get('stateName') || '';
+    });
   }
 
   goBack() {

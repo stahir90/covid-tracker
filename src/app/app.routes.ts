@@ -4,7 +4,7 @@ import { DistrictViewComponent } from './district-view/district-view.component';
 
 export const routes: Routes = [
   { path: 'state', component: StateViewComponent },
-  { path: 'district', component: DistrictViewComponent },
+  { path: 'state/:stateName', component: DistrictViewComponent },
   { path: '', redirectTo: '/state', pathMatch: 'full' },
   { path: '**', redirectTo: '/state' },
 ];
