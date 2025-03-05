@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-state-view',
@@ -11,41 +12,61 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './state-view.component.html',
   styleUrls: ['./state-view.component.scss'],
 })
-export class StateViewComponent {
-  states = [
-    {
-      name: 'State A',
-      confirmed: 1000,
-      recovered: 800,
-      deceased: 200,
-      image: 'assets/images/state-a.png',
-    },
-    {
-      name: 'State B',
-      confirmed: 1500,
-      recovered: 1200,
-      deceased: 300,
-      image: 'assets/images/state-b.png',
-    },
-    {
-      name: 'State C',
-      confirmed: 2000,
-      recovered: 1800,
-      deceased: 200,
-      image: 'assets/images/state-c.png',
-    },
-    {
-      name: 'State D',
-      confirmed: 2500,
-      recovered: 2200,
-      deceased: 300,
-      image: 'assets/images/state-d.png',
-    },
-  ];
+export class StateViewComponent implements OnInit {
+  states: {
+    name: string;
+    confirmed: number;
+    recovered: number;
+    deceased: number;
+    image: string;
+  }[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
-  onStateClick(state: any) {
+  ngOnInit(): void {
+    this.loadStates();
+  }
+
+  loadStates(): void {
+    const stateImages = [
+      'assets/images/state-a.png',
+      'assets/images/state-b.png',
+      'assets/images/state-c.png',
+      'assets/images/state-d.png',
+      'assets/images/state-e.png',
+    ];
+
+    this.http.get('assets/data/covid_data.json').subscribe((data: any) => {
+      this.states = Object.keys(data).map((stateName, index) => {
+        const stateData = data[stateName].districtData;
+        const totalConfirmed = Object.values(stateData).reduce(
+          (sum: number, district: any) => sum + district.confirmed,
+          0
+        );
+        const totalRecovered = Object.values(stateData).reduce(
+          (sum: number, district: any) => sum + district.recovered,
+          0
+        );
+        const totalDeceased = Object.values(stateData).reduce(
+          (sum: number, district: any) => sum + district.deceased,
+          0
+        );
+
+        const imageIndex = index % stateImages.length;
+        const image = stateImages[imageIndex];
+
+        return {
+          name: stateName,
+          confirmed: totalConfirmed,
+          recovered: totalRecovered,
+          deceased: totalDeceased,
+          image: image,
+        };
+      });
+    });
+  }
+
+  onStateClick(state: any): void {
     this.router.navigate(['/state', state.name]);
   }
 }

@@ -3,49 +3,57 @@ import { Component, OnInit } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-district-view',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatIconModule],
+  imports: [CommonModule, MatListModule, MatIconModule, HttpClientModule],
   templateUrl: './district-view.component.html',
   styleUrls: ['./district-view.component.scss'],
 })
 export class DistrictViewComponent implements OnInit {
   stateName: string = '';
-  districts = [
-    {
-      name: 'District 1',
-      confirmed: 500,
-      recovered: 400,
-      deceased: 100,
-      image: 'assets/images/district-1.png',
-    },
-    {
-      name: 'District 2',
-      confirmed: 600,
-      recovered: 500,
-      deceased: 100,
-      image: 'assets/images/district-2.png',
-    },
-    {
-      name: 'District 3',
-      confirmed: 700,
-      recovered: 600,
-      deceased: 100,
-      image: 'assets/images/district-3.png',
-    },
-  ];
+  districts: {
+    name: string;
+    confirmed: number;
+    recovered: number;
+    deceased: number;
+    image: string;
+  }[] = [];
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.stateName = params.get('stateName') || '';
+      this.loadDistricts();
     });
   }
 
-  goBack() {
+  loadDistricts(): void {
+    this.http.get('assets/data/covid_data.json').subscribe((data: any) => {
+      const stateData = data[this.stateName]?.districtData;
+      if (stateData) {
+        this.districts = Object.keys(stateData).map((districtName) => {
+          const district = stateData[districtName];
+          return {
+            name: districtName,
+            confirmed: district.confirmed,
+            recovered: district.recovered,
+            deceased: district.deceased,
+            image: `assets/images/state-b.png`,
+          };
+        });
+      }
+    });
+  }
+
+  goBack(): void {
     this.router.navigate(['/state']);
   }
 }
